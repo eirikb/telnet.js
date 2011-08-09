@@ -1,4 +1,4 @@
 telnet.js
 -
 
-Simple library to aid in development of a simple telnet server
+Library to generate output for a telnet server
