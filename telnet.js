@@ -33,12 +33,8 @@ exports.enableEcho = function() {
     return new Buffer([IAC, WILL, echo, IAC, WILL, suppressGoAhead]);
 };
 
-exports.s = function(x, y, msg) {
-    return new Buffer([27]) + "[" + y + ";" + x + "H" + msg;
-};
-
 exports.chain = exports.c = function() {
-    return new function() {
+    return (function() {
         var self = this,
         buffer = self.buffer = '';
 
@@ -136,6 +132,8 @@ exports.chain = exports.c = function() {
             socket.write(buffer);
             return self;
         };
-    };
+
+        return self;
+    })();
 };
 
