@@ -30,7 +30,7 @@ linemode = 34,
 environmentVariables = 36;
 
 exports.enableEcho = function() {
-    return new Buffer([IAC, WILL, echo, IAC, DO, suppressGoAhead, IAC, WILL, supressGoAhead]);
+    return new Buffer([IAC, WILL, echo, IAC, DO, suppressGoAhead, IAC, WILL, suppressGoAhead]);
 };
 
 exports.s = function(x, y, msg) {
