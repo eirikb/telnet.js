@@ -30,7 +30,7 @@ linemode = 34,
 environmentVariables = 36;
 
 exports.enableEcho = function() {
-    return new Buffer([IAC, WILL, echo, IAC, DO, suppressGoAhead, IAC, WILL, suppressGoAhead]);
+    return new Buffer([IAC, WILL, echo, IAC, WILL, suppressGoAhead]);
 };
 
 exports.s = function(x, y, msg) {
@@ -132,8 +132,9 @@ exports.chain = exports.c = function() {
             return self;
         };
 
-        self.send = self.s = function(socket) {
+        self.send = self.s = self.write = self.w = function(socket) {
             socket.write(buffer);
+            return self;
         };
     };
 };
