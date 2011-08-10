@@ -246,7 +246,7 @@ var cmd = {
     // Set normal video on screen				
     normalVideo: '[?5l',
     // Turn off character attributes			
-    SGR0: '[m',
+    normal: '[m',
     // Turn off character attributes			
     SGR02: '[0m',
     // Turn bold mode on						
