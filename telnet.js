@@ -33,8 +33,11 @@ exports.enableEcho = function() {
     return new Buffer([IAC, WILL, echo, IAC, WILL, suppressGoAhead]);
 };
 
-// TODO: Sort out ---------------------------------------------------
 var cmd = {
+
+    //
+    // Stuff that either dont work or is probably useless --------------------
+    //
     // Set new line mode						
     LMN: '[20h',
     // Set cursor key to application			
@@ -45,8 +48,6 @@ var cmd = {
     DECCOLM: '[?3h',
     // Set smooth scrolling					
     DECSCLM: '[?4h',
-    // Set reverse video on screen			
-    DECSCNM: '[?5h',
     // Set origin to relative					
     DECOM: '[?6h',
     // Set auto-wrap mode						
@@ -65,8 +66,10 @@ var cmd = {
     DECCOLM2: '[?3l',
     // Set jump scrolling						
     DECSCLM2: '[?4l',
-    // Set normal video on screen				
-    DECSCNM2: '[?5l',
+
+    //
+    // Not tested --------------------
+    //
     // Set origin to absolute					
     DECOM2: '[?6l',
     // Reset auto-wrap mode					
@@ -103,58 +106,44 @@ var cmd = {
     SS2: 'N',
     // Set single shift 3						
     SS3: 'O',
-    // Turn off character attributes			
-    SGR0: '[m',
-    // Turn off character attributes			
-    SGR02: '[0m',
-    // Turn bold mode on						
-    SGR1: '[1m',
-    // Turn low intensity mode on				
-    SGR2: '[2m',
-    // Turn underline mode on					
-    SGR4: '[4m',
-    // Turn blinking mode on					
-    SGR5: '[5m',
-    // Turn reverse video on					
-    SGR7: '[7m',
     // Turn invisible text mode on			
-    SGR8: '[8m',
+    invisible: '[8m',
     // Set top and bottom lines of a window	
     DECSTBM: '[Line;Liner',
     // Move cursor up n lines				
-    CUU: '[ValueA',
+    up: '[ValueA',
     // Move cursor down n lines			
-    CUD: '[ValueB',
+    down: '[ValueB',
     // Move cursor right n lines			
-    CUF: '[ValueC',
+    right: '[ValueC',
     // Move cursor left n lines			
-    CUB: '[ValueD',
+    left: '[ValueD',
     // Move cursor to upper left corner		
-    cursorhome: '[H',
+    home: '[H',
     // Move cursor to upper left corner		
     cursorhome2: '[;H',
     // Move cursor to screen location v,h	
-    CUP: '[Line;ColumnH',
+    move: '[Line;ColumnH',
     // Move cursor to upper left corner		
     hvhome: '[f',
     // Move cursor to upper left corner		
     hvhome2: '[;f',
     // Move cursor to screen location v,h	
-    CUP2: '[Line;Columnf',
+    move2: '[Line;Columnf',
     // Move/scroll window up one line			
-    IND: 'D',
+    scrollUp: 'D',
     // Move/scroll window down one line		
-    RI: 'M',
+    scrollDown: 'M',
     // Move to next line						
-    NEL: 'E',
+    nextline: 'E',
     // Save cursor position and attributes	
-    DECSC: '7',
+    save: '7',
     // Restore cursor position and attributes	
-    DECSC2: '8',
+    restore: '8',
     // Set a tab at the current column		
-    HTS: 'H',
+    tab: 'H',
     // Clear a tab at the current column		
-    TBC: '[g',
+    clearTab: '[g',
     // Clear a tab at the current column		
     TBC2: '[0g',
     // Clear all tabs							
@@ -174,7 +163,7 @@ var cmd = {
     // Clear line from cursor left			
     EL1: '[1K',
     // Clear entire line						
-    EL2: '[2K',
+    clearLine: '[2K',
     // Clear screen from cursor down			
     ED0: '[J',
     // Clear screen from cursor down			
@@ -182,7 +171,7 @@ var cmd = {
     // Clear screen from cursor up			
     ED1: '[1J',
     // Clear entire screen					
-    ED2: '[2J',
+    clear: '[2J',
     // Device status report					
     DSR: '5n',
     // Response: terminal is OK				
@@ -250,7 +239,26 @@ var cmd = {
     // Identify what the terminal is			
     ident: 'Z',
     // Correct response to ident				
-    identresp: '/Z'
+    identresp: '/Z',
+
+    // Set reverse video on screen			
+    reverseVideo: '[?5h',
+    // Set normal video on screen				
+    normalVideo: '[?5l',
+    // Turn off character attributes			
+    SGR0: '[m',
+    // Turn off character attributes			
+    SGR02: '[0m',
+    // Turn bold mode on						
+    bold: '[1m',
+    // Turn low intensity mode on				
+    lowInensity: '[2m',
+    // Turn underline mode on					
+    underline: '[4m',
+    // Turn blinking mode on					
+    blinking: '[5m',
+    // Turn reverse video on					
+    reverse: '[7m'
 };
 
 exports.chain = exports.c = function() {
@@ -259,94 +267,14 @@ exports.chain = exports.c = function() {
         buffer = self.buffer = '';
 
         Object.keys(cmd).forEach(function(key) {
-            self[key] = function(column, line) {
-                buffer += ESC + cmd[key].replace('Column', column).replace('Line', line);
+            self[key] = function(a, b) {
+                buffer += ESC + cmd[key].replace(/column/ig, a).replace(/line/ig, b).replace(/value/ig, a);
                 return self;
             };
         });
 
         self.append = self.a = function(msg) {
             buffer += msg;
-            return self;
-        };
-
-        self.up = function() {
-            buffer += ESC + '[nA';
-            return self;
-        };
-
-        self.down = function() {
-            buffer += ESC + '[nB';
-            return self;
-        };
-
-        self.right = function() {
-            buffer += ESC + '[nC';
-            return self;
-        };
-
-        self.left = function() {
-            buffer += ESC + '[nD';
-            return self;
-        };
-
-        self.move = function(x, y) {
-            buffer += ESC + '[' + y + ';' + x + 'H';
-            return self;
-        };
-
-        self.save = function() {
-            buffer += ESC + '7';
-            return self;
-        };
-
-        self.restore = function() {
-            buffer += ESC + '8';
-            return self;
-        };
-
-        self.clearLine = function() {
-            buffer += ESC + '[2K';
-            return self;
-        };
-
-        self.clear = function() {
-            buffer += ESC + '[2J';
-            return self;
-        };
-
-        self.normal = function() {
-            buffer += ESC + '[0m';
-            return self;
-        };
-
-        self.bold = function() {
-            buffer += ESC + '[1m';
-            return self;
-        };
-
-        self.underline = function() {
-            buffer += ESC + '[4m';
-            return self;
-        };
-
-        self.blink = function() {
-            buffer += ESC + '[5m';
-            return self;
-        };
-
-        self.video = function() {
-            buffer += ESC + '[7m';
-            return self;
-        };
-
-        self.height = function(i) {
-            buffer += ESC + '#' + (i + 3);
-            return self;
-        };
-
-        self.wide = function() {
-            buffer += ESC + '[?3l';
             return self;
         };
 
