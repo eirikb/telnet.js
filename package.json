@@ -2,7 +2,7 @@
   "name"          : "telnet.js",
   "description"   : "Telnet library",
   "homepage"      : "https://github.com/eirikb/telnet.js/",
-  "keywords"      : ["util", "functional", "server", "telnet"],
+  "keywords"      : ["util", "server", "telnet"],
   "author"        : "Eirik Brandtzæg <eirikb@eirikb.no>",
   "contributors"  : [],
   "dependencies"  : [],
