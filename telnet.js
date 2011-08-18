@@ -1,5 +1,6 @@
 var ESC = new Buffer([27]);
 
+// Telnet commands
 var SE = 240,
 NOP = 241,
 DM = 242,
@@ -29,46 +30,33 @@ remoteFlowControl = 33,
 linemode = 34,
 environmentVariables = 36;
 
-exports.enableEcho = function() {
-    return new Buffer([IAC, WILL, echo, IAC, WILL, suppressGoAhead]);
-};
-
-var cmd = {
-
-    //
-    // Stuff that either dont work or is probably useless --------------------
-    //
-    // Set new line mode						
-    LMN: '[20h',
-    // Set cursor key to application			
-    DECCKM: '[?1h',
-    // Set ANSI (versus VT52)					
-    DECANM: 'e',
-    // Set number of columns to 132			
-    DECCOLM: '[?3h',
-    // Set smooth scrolling					
-    DECSCLM: '[?4h',
-    // Set origin to relative					
-    DECOM: '[?6h',
-    // Set auto-wrap mode						
-    DECAWM: '[?7h',
-    // Set auto-repeat mode					
-    DECARM: '[?8h',
-    // Set interlacing mode					
-    DECINLM: '[?9h',
-    // Set line feed mode						
-    LMN2: '[20l',
-    // Set cursor key to cursor				
-    DECCKM2: '[?1l',
-    // Set VT52 (versus ANSI)					
-    DECANM2: '[?2l',
-    // Set number of columns to 80			
-    DECCOLM2: '[?3l',
-    // Set jump scrolling						
-    DECSCLM2: '[?4l',
+// Escape sequences
+var seq = {
+    // Set reverse video on screen			
+    reverseVideo: '[?5h',
+    // Set normal video on screen				
+    normalVideo: '[?5l',
+    // Turn off character attributes			
+    normal: '[m',
+    // Turn off character attributes			
+    SGR02: '[0m',
+    // Turn bold mode on						
+    bold: '[1m',
+    // Turn low intensity mode on				
+    lowIntensity: '[2m',
+    // Turn underline mode on					
+    underline: '[4m',
+    // Turn blinking mode on					
+    blinking: '[5m',
+    // Turn reverse video on					
+    reverse: '[7m',
+    // Move cursor to screen location v,h	
+    move: '[Line;ColumnH',
+    // Clear entire screen					
+    clear: '[2J',
 
     //
-    // Not tested --------------------
+    // Not tested 
     //
     // Set origin to absolute					
     DECOM2: '[?6l',
@@ -122,8 +110,6 @@ var cmd = {
     home: '[H',
     // Move cursor to upper left corner		
     cursorhome2: '[;H',
-    // Move cursor to screen location v,h	
-    move: '[Line;ColumnH',
     // Move cursor to upper left corner		
     hvhome: '[f',
     // Move cursor to upper left corner		
@@ -170,8 +156,6 @@ var cmd = {
     ED02: '[0J',
     // Clear screen from cursor up			
     ED1: '[1J',
-    // Clear entire screen					
-    clear: '[2J',
     // Device status report					
     DSR: '5n',
     // Response: terminal is OK				
@@ -241,49 +225,73 @@ var cmd = {
     // Correct response to ident				
     identresp: '/Z',
 
-    // Set reverse video on screen			
-    reverseVideo: '[?5h',
-    // Set normal video on screen				
-    normalVideo: '[?5l',
-    // Turn off character attributes			
-    normal: '[m',
-    // Turn off character attributes			
-    SGR02: '[0m',
-    // Turn bold mode on						
-    bold: '[1m',
-    // Turn low intensity mode on				
-    lowInensity: '[2m',
-    // Turn underline mode on					
-    underline: '[4m',
-    // Turn blinking mode on					
-    blinking: '[5m',
-    // Turn reverse video on					
-    reverse: '[7m'
+    //
+    // Stuff that either dont work or is probably useless
+    //
+    // Set new line mode						
+    LMN: '[20h',
+    // Set cursor key to application			
+    DECCKM: '[?1h',
+    // Set ANSI (versus VT52)					
+    DECANM: 'e',
+    // Set number of columns to 132			
+    DECCOLM: '[?3h',
+    // Set smooth scrolling					
+    DECSCLM: '[?4h',
+    // Set origin to relative					
+    DECOM: '[?6h',
+    // Set auto-wrap mode						
+    DECAWM: '[?7h',
+    // Set auto-repeat mode					
+    DECARM: '[?8h',
+    // Set interlacing mode					
+    DECINLM: '[?9h',
+    // Set line feed mode						
+    LMN2: '[20l',
+    // Set cursor key to cursor				
+    DECCKM2: '[?1l',
+    // Set VT52 (versus ANSI)					
+    DECANM2: '[?2l',
+    // Set number of columns to 80			
+    DECCOLM2: '[?3l',
+    // Set jump scrolling						
+    DECSCLM2: '[?4l'
+};
+exports.enableEcho = function() {
+    return new Buffer([IAC, WILL, echo, IAC, WILL, suppressGoAhead]);
 };
 
-exports.chain = exports.c = function() {
-    return (function() {
-        var self = this,
-        buffer = self.buffer = '';
+var Seq = function() {
+    this.buffer = this.b = this.retuls = '';
+};
 
-        Object.keys(cmd).forEach(function(key) {
-            self[key] = function(a, b) {
-                buffer += ESC + cmd[key].replace(/column/ig, a).replace(/line/ig, b).replace(/value/ig, a);
-                return self;
-            };
+Object.keys(seq).forEach(function(key) {
+    var cmd = seq[key];
+    if (cmd.match(/column|line|value/i)) {
+        Seq.prototype[key] = function(a, b) {
+            this.buffer += ESC + cmd.
+            replace(/column/ig, a).
+            replace(/line/ig, b).replace(/value/ig, a);
+            return this;
+        };
+    } else {
+        Seq.prototype.__defineGetter__(key, function() {
+            this.buffer += ESC + cmd;
+            return this;
         });
+    }
+});
 
-        self.append = self.a = function(msg) {
-            buffer += msg;
-            return self;
-        };
+Seq.prototype.append = Seq.prototype.a = function(msg) {
+    this.buffer += msg;
+    return this;
+};
 
-        self.send = self.s = self.write = self.w = function(socket) {
-            socket.write(buffer);
-            return self;
-        };
+Seq.prototype.send = function(socket) {
+    socket.write(this.buffer);
+};
 
-        return self;
-    } ());
+exports.seq = exports.s = function() {
+    return new Seq();
 };
 
