@@ -32,72 +32,22 @@ environmentVariables = 36;
 
 // Escape sequences
 var seq = {
-    // Set reverse video on screen			
+    // Set reverse video on screen
     reverseVideo: '[?5h',
     // Set normal video on screen				
     normalVideo: '[?5l',
     // Turn off character attributes			
     normal: '[m',
-    // Turn off character attributes			
-    SGR02: '[0m',
     // Turn bold mode on						
     bold: '[1m',
-    // Turn low intensity mode on				
-    lowIntensity: '[2m',
     // Turn underline mode on					
     underline: '[4m',
-    // Turn blinking mode on					
-    blinking: '[5m',
     // Turn reverse video on					
     reverse: '[7m',
     // Move cursor to screen location v,h	
     move: '[Line;ColumnH',
     // Clear entire screen					
     clear: '[2J',
-
-    //
-    // Not tested 
-    //
-    // Set origin to absolute					
-    DECOM2: '[?6l',
-    // Reset auto-wrap mode					
-    DECAWM2: '[?7l',
-    // Reset auto-repeat mode					
-    DECARM2: '[?8l',
-    // Reset interlacing mode					
-    DECINLM2: '[?9l',
-    // Set alternate keypad mode				
-    DECKPAM: '=',
-    // Set numeric keypad mode				
-    DECKPNM: '>',
-    // Set United Kingdom G0 character set	
-    setukg0: '(A',
-    // Set United Kingdom G1 character set	
-    setukg1: ')A',
-    // Set United States G0 character set		
-    setusg0: '(B',
-    // Set United States G1 character set		
-    setusg1: ')B',
-    // Set G0 special chars. & line set	
-    setspecg0: '(0',
-    // Set G1 special chars. & line set	
-    setspecg1: ')0',
-    // Set G0 alternate character ROM			
-    setaltg0: '(1',
-    // Set G1 alternate character ROM			
-    setaltg1: ')1',
-    // Set G0 alt char ROM and spec. graphics	
-    setaltspecg0: '(2',
-    // Set G1 alt char ROM and spec. graphics	
-    setaltspecg1: ')2',
-    // Set single shift 2						
-    SS2: 'N',
-    // Set single shift 3						
-    SS3: 'O',
-    // Turn invisible text mode on			
-    invisible: '[8m',
-    // Set top and bottom lines of a window	
-    DECSTBM: '[Line;Liner',
     // Move cursor up n lines				
     up: '[ValueA',
     // Move cursor down n lines			
@@ -108,14 +58,6 @@ var seq = {
     left: '[ValueD',
     // Move cursor to upper left corner		
     home: '[H',
-    // Move cursor to upper left corner		
-    cursorhome2: '[;H',
-    // Move cursor to upper left corner		
-    hvhome: '[f',
-    // Move cursor to upper left corner		
-    hvhome2: '[;f',
-    // Move cursor to screen location v,h	
-    move2: '[Line;Columnf',
     // Move/scroll window up one line			
     scrollUp: 'D',
     // Move/scroll window down one line		
@@ -126,54 +68,30 @@ var seq = {
     save: '7',
     // Restore cursor position and attributes	
     restore: '8',
-    // Set a tab at the current column		
-    tab: 'H',
-    // Clear a tab at the current column		
-    clearTab: '[g',
-    // Clear a tab at the current column		
-    TBC2: '[0g',
-    // Clear all tabs							
-    TBC3: '[3g',
     // Double-height letters, top half		
-    DECDHL: '#3',
+    bigTop: '#3',
     // Double-height letters, bottom half		
-    DECDHL2: '#4',
+    bigBottom: '#4',
     // Single width, single height letters	
-    DECSWL: '#5',
+    singleWidth: '#5',
     // Double width, single height letters	
-    DECDWL2: '#6',
+    doubleWidth: '#6',
     // Clear line from cursor right			
-    EL0: '[K',
-    // Clear line from cursor right			
-    EL02: '[0K',
+    clearRight: '[K',
     // Clear line from cursor left			
-    EL1: '[1K',
+    clearUp: '[1K',
     // Clear entire line						
     clearLine: '[2K',
     // Clear screen from cursor down			
-    ED0: '[J',
-    // Clear screen from cursor down			
-    ED02: '[0J',
+    clearDown: '[J',
     // Clear screen from cursor up			
-    ED1: '[1J',
-    // Device status report					
-    DSR: '5n',
-    // Response: terminal is OK				
-    DSR2: '0n',
-    // Response: terminal is not OK			
-    DSR3: '3n',
-    // Get cursor position					
-    DSR4: '6n',
-    // Response: cursor is at v,h	
-    CPR: 'Line;ColumnR',
-    // Identify what terminal type			
-    DA: '[c',
-    // Identify what terminal type (another)	
-    DA2: '[0c',
-    // Response: terminal type code n		
-    DA3: '[?1;Value0c',
+    clearUp: '[1J',
     // Reset terminal to initial state		
-    RIS: 'c',
+    reset: 'c',
+
+    //
+    // Not tested 
+    //
     // Screen alignment display				
     DECALN: '#8',
     // Confidence power up test				
@@ -224,10 +142,95 @@ var seq = {
     ident: 'Z',
     // Correct response to ident				
     identresp: '/Z',
+    // Set alternate keypad mode				
+    DECKPAM: '=',
+    // Set numeric keypad mode				
+    DECKPNM: '>',
+    // Set United Kingdom G0 character set	
+    setukg0: '(A',
+    // Set United Kingdom G1 character set	
+    setukg1: ')A',
+    // Set United States G0 character set		
+    setusg0: '(B',
+    // Set United States G1 character set		
+    setusg1: ')B',
+    // Set G0 special chars. & line set	
+    setspecg0: '(0',
+    // Set G1 special chars. & line set	
+    setspecg1: ')0',
+    // Set G0 alternate character ROM			
+    setaltg0: '(1',
+    // Set G1 alternate character ROM			
+    setaltg1: ')1',
+
+    //
+    // Duplicates?
+    //
+    // Turn off character attributes			
+    SGR02: '[0m',
+    // Move cursor to upper left corner		
+    cursorhome2: '[;H',
+    // Move cursor to upper left corner		
+    hvhome: '[f',
+    // Move cursor to upper left corner		
+    hvhome2: '[;f',
+    // Move cursor to screen location v,h	
+    move2: '[Line;Columnf',
+    // Clear line from cursor right			
+    EL02: '[0K',
+    // Clear screen from cursor down			
+    ED02: '[0J',
 
     //
     // Stuff that either dont work or is probably useless
+    // Lightly tested on GNU inetutils 1.8 TELNET 
     //
+    // Turn blinking mode on (Does not seem to do as advertised)
+    blinking: '[5m',
+    // Turn low intensity mode on				
+    lowIntensity: '[2m',
+    // Clear a tab at the current column		
+    clearTab: '[g',
+    // Clear a tab at the current column		
+    TBC2: '[0g',
+    // Clear all tabs							
+    TBC3: '[3g',
+    // Turn invisible text mode on			
+    invisible: '[8m',
+    // Set a tab at the current column		
+    tab: 'H',
+    // Device status report					
+    DSR: '5n',
+    // Response: terminal is OK				
+    DSR2: '0n',
+    // Response: terminal is not OK			
+    DSR3: '3n',
+    // Get cursor position					
+    DSR4: '6n',
+    // Response: cursor is at v,h	
+    CPR: 'Line;ColumnR',
+    // Identify what terminal type			
+    DA: '[c',
+    // Identify what terminal type (another)	
+    DA2: '[0c',
+    // Response: terminal type code n		
+    DA3: '[?1;Value0c',
+    // Set top and bottom lines of a window	
+    DECSTBM: '[Line;Liner',
+    // Set single shift 2						
+    SS2: 'N',
+    // Set single shift 3						
+    SS3: 'O',
+    // Set G0 alt char ROM and spec. graphics	
+    setaltspecg0: '(2',
+    // Set G1 alt char ROM and spec. graphics	
+    setaltspecg1: ')2',
+    // Reset interlacing mode					
+    DECINLM2: '[?9l',
+    // Reset auto-wrap mode					
+    DECARM2: '[?8l',
+    // Set origin to absolute					
+    DECOM2: '[?6l',
     // Set new line mode						
     LMN: '[20h',
     // Set cursor key to application			
