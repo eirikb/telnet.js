@@ -90,10 +90,57 @@ var seq = {
     reset: 'c',
 
     //
-    // Not tested 
+    // Duplicates?
     //
-    // Screen alignment display				
-    DECALN: '#8',
+    // Turn off character attributes			
+    SGR02: '[0m',
+    // Move cursor to upper left corner		
+    cursorhome2: '[;H',
+    // Move cursor to upper left corner		
+    hvhome: '[f',
+    // Move cursor to upper left corner		
+    hvhome2: '[;f',
+    // Move cursor to screen location v,h	
+    move2: '[Line;Columnf',
+    // Clear line from cursor right			
+    EL02: '[0K',
+    // Clear screen from cursor down			
+    ED02: '[0J',
+
+    //
+    // Stuff that either dont work or is probably useless
+    // Lightly tested on GNU inetutils 1.8 TELNET 
+    //
+    // Turn blinking mode on (Does not seem to do as advertised)
+    blinking: '[5m',
+    // Turn low intensity mode on				
+    lowIntensity: '[2m',
+    // Clear a tab at the current column		
+    clearTab: '[g',
+    // Move cursor up one line				
+    cursorup: 'A',
+    // Move cursor down one line				
+    cursordn: 'B',
+    // Move cursor right one char				
+    cursorrt: 'C',
+    // Move cursor left one char				
+    cursorlf: 'D',
+    // Move cursor to upper left corner		
+    cursorhome3: 'H',
+    // Generate a reverse line-feed			
+    revindex: 'I',
+    // Erase to end of current line			
+    cleareol: 'K',
+    // Erase to end of screen					
+    cleareos: 'J',
+    // Clear a tab at the current column		
+    TBC2: '[0g',
+    // Clear all tabs							
+    TBC3: '[3g',
+    // Turn invisible text mode on			
+    invisible: '[8m',
+    // Set a tab at the current column		
+    tab: 'H',
     // Confidence power up test				
     DECTST: '[2;1y',
     // Confidence loopback test				
@@ -122,22 +169,8 @@ var seq = {
     setgr: 'F',
     // Use normal US/UK character set			
     resetgr: 'G',
-    // Move cursor up one line				
-    cursorup: 'A',
-    // Move cursor down one line				
-    cursordn: 'B',
-    // Move cursor right one char				
-    cursorrt: 'C',
-    // Move cursor left one char				
-    cursorlf: 'D',
-    // Move cursor to upper left corner		
-    cursorhome3: 'H',
-    // Generate a reverse line-feed			
-    revindex: 'I',
-    // Erase to end of current line			
-    cleareol: 'K',
-    // Erase to end of screen					
-    cleareos: 'J',
+    // Screen alignment display				
+    DECALN: '#8',
     // Identify what the terminal is			
     ident: 'Z',
     // Correct response to ident				
@@ -162,43 +195,6 @@ var seq = {
     setaltg0: '(1',
     // Set G1 alternate character ROM			
     setaltg1: ')1',
-
-    //
-    // Duplicates?
-    //
-    // Turn off character attributes			
-    SGR02: '[0m',
-    // Move cursor to upper left corner		
-    cursorhome2: '[;H',
-    // Move cursor to upper left corner		
-    hvhome: '[f',
-    // Move cursor to upper left corner		
-    hvhome2: '[;f',
-    // Move cursor to screen location v,h	
-    move2: '[Line;Columnf',
-    // Clear line from cursor right			
-    EL02: '[0K',
-    // Clear screen from cursor down			
-    ED02: '[0J',
-
-    //
-    // Stuff that either dont work or is probably useless
-    // Lightly tested on GNU inetutils 1.8 TELNET 
-    //
-    // Turn blinking mode on (Does not seem to do as advertised)
-    blinking: '[5m',
-    // Turn low intensity mode on				
-    lowIntensity: '[2m',
-    // Clear a tab at the current column		
-    clearTab: '[g',
-    // Clear a tab at the current column		
-    TBC2: '[0g',
-    // Clear all tabs							
-    TBC3: '[3g',
-    // Turn invisible text mode on			
-    invisible: '[8m',
-    // Set a tab at the current column		
-    tab: 'H',
     // Device status report					
     DSR: '5n',
     // Response: terminal is OK				
