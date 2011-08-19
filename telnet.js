@@ -1,34 +1,47 @@
 var ESC = new Buffer([27]);
 
 // Telnet commands
-var SE = 240,
-NOP = 241,
-DM = 242,
-BRK = 243,
-IP = 244,
-AO = 245,
-AYT = 246,
-EC = 247,
-EL = 248,
-GA = 249,
-SB = 250,
-WILL = 251,
-WONT = 252,
-DO = 253,
-DONT = 254,
-IAC = 255;
+var cmd = {
+    // Subnegotiation end
+    SE: 240,
+    // No operation
+    NOP: 241,
+    // Data mark
+    DM: 242,
+    // Break
+    BRK: 243,
+    // Interrupt process
+    IP: 244,
+    // Abort output 
+    AO: 245,
+    // Are you there
+    AYT: 246,
+    // Erase character
+    EC: 247,
+    // Erase line
+    EL: 248,
+    // Go ahead
+    GA: 249,
+    // Subnegotiation begin
+    SB: 250,
+    WILL: 251,
+    WONT: 252,
+    DO: 253,
+    DONT: 254,
+    IAC: 255,
 
-var transmitBinary = 0,
-echo = 1,
-suppressGoAhead = 3,
-status = 5,
-timingMark = 6,
-terminalType = 24,
-windowSize = 31,
-terminalSpeed = 32,
-remoteFlowControl = 33,
-linemode = 34,
-environmentVariables = 36;
+    transmitBinary: 0,
+    echo: 1,
+    suppressGoAhead: 3,
+    status: 5,
+    timingMark: 6,
+    terminalType: 24,
+    windowSize: 31,
+    terminalSpeed: 32,
+    remoteFlowControl: 33,
+    linemode: 34,
+    environmentVariables: 36
+};
 
 // Escape sequences
 var seq = {
@@ -257,11 +270,10 @@ var seq = {
     DECSCLM2: '[?4l'
 };
 exports.enableEcho = function() {
-    return new Buffer([IAC, WILL, echo, IAC, WILL, suppressGoAhead]);
 };
 
 var Seq = function() {
-    this.buffer = this.b = this.retuls = '';
+    this.buffer = this.b = this.result = '';
 };
 
 Object.keys(seq).forEach(function(key) {
@@ -293,4 +305,23 @@ Seq.prototype.send = function(socket) {
 exports.seq = exports.s = function() {
     return new Seq();
 };
+
+var Cmd = function() {
+    this.buffer = this.b = this.result = [];
+};
+
+Object.keys(cmd).forEach(function(key) {
+    Cmd.prototype.__defineGetter__(key, function() {
+        this.buffer.push(cmd[key]);
+        return this;
+    });
+});
+
+Cmd.prototype.send = function(socket) {
+    socket.write(new Buffer(this.buffer));
+};
+exports.cmd = exports.c = function() {
+    return new Cmd;
+};
+
 
