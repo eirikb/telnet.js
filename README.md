@@ -9,7 +9,7 @@ require('net') to create a server (see [server.js])
 Install
 --
 
-  npm install telnet
+    npm install telnet
 
 Example
 --
