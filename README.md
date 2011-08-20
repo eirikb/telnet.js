@@ -28,7 +28,8 @@ Example
 
 API
 --
-oEscape sequences
+
+Escape sequences
 ---
 
 Set reverse video on screen
