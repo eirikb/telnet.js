@@ -61,7 +61,3 @@ Escape sequences
 <b>clearUp</b> - <i> Clear screen from cursor up</i>  
 <b>reset</b> - <i> Reset terminal to initial state</i>  
 
-Telnet
---
-
-Telnet give users a simple way to view and input data.
