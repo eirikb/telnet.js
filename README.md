@@ -27,36 +27,121 @@ Example
     }).listen(7000);
 
 API
+--
+oEscape sequences
+---
 
-<b>reverseVideo</b> - Set video to inverted on screen
-<b>normalVideo</b> - Set normal video on screen				
-<b>normal</b> - Turn off character attributes			
-<b>bold</b> - Turn bold mode on						
-<b>underline</b> - Turn underline mode on
-<b>reverse</b> - Turn reverse video on					
-<b>move</b> - Move cursor to screen location v,h	
-<b>clear</b> - Clear entire screen					
-<b>up</b> - Move cursor up n lines				
-<b>down</b> - Move cursor down n lines			
-<b>right</b> - Move cursor right n lines			
-<b>left</b> - Move cursor left n lines			
-<b>home</b> - Move cursor to upper left corner		
-<b>scrollUp</b> - Move/scroll window up one line			
-<b>scrollDown</b> - Move/scroll window down one line		
-<b>nextline</b> - Move to next line						
-<b>save</b> - Save cursor position and attributes	
-<b>restore</b> - Restore cursor position and attributes	
-<b>bigTop</b> - Double-height letters, top half		
-<b>bigBottom</b> - Double-height letters, bottom half		
-<b>singleWidth</b> - Single width, single height letters	
-<b>doubleWidth</b> - Double width, single height letters	
-<b>clearRight</b> - Clear line from cursor right			
-<b>clearUp</b> - Clear line from cursor left			
-<b>clearLine</b> - Clear entire line						
-<b>clearDown</b> - Clear screen from cursor down			
-<b>clearUp</b> - Clear screen from cursor up			
-<b>reset</b> - Reset terminal to initial state		
+Set reverse video on screen
 
+    reverseVideo
+
+Set normal video on screen				
+
+    normalVideo
+
+Turn off character attributes			
+
+    normal
+
+Turn bold mode on						
+
+    bold
+
+Turn underline mode on					
+
+    underline
+
+Turn reverse video on					
+
+    reverse
+
+Move cursor to screen location v,h	
+
+    move
+
+Clear entire screen					
+
+    clear
+
+Move cursor up n lines				
+
+    up
+
+Move cursor down n lines			
+
+    down
+
+Move cursor right n lines			
+
+    right
+
+Move cursor left n lines			
+
+    left
+
+Move cursor to upper left corner		
+
+    home
+
+Move/scroll window up one line			
+
+    scrollUp
+
+Move/scroll window down one line		
+
+    scrollDown
+
+Move to next line						
+
+    nextline
+
+Save cursor position and attributes	
+
+    save
+
+Restore cursor position and attributes	
+
+    restore
+
+Double-height letters, top half		
+
+    bigTop
+
+Double-height letters, bottom half		
+
+    bigBottom
+
+Single width, single height letters	
+
+    singleWidth
+
+Double width, single height letters	
+
+    doubleWidth
+
+Clear line from cursor right			
+
+    clearRight
+
+Clear line from cursor left			
+
+    clearUp
+
+Clear entire line						
+
+    clearLine
+
+Clear screen from cursor down			
+
+    clearDown
+
+Clear screen from cursor up			
+
+    clearUp
+
+Reset terminal to initial state		
+
+    reset
 
 Telnet
 --
