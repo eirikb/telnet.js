@@ -32,117 +32,34 @@ API
 Escape sequences
 ---
 
-Set reverse video on screen
-
-    reverseVideo
-
-Set normal video on screen				
-
-    normalVideo
-
-Turn off character attributes			
-
-    normal
-
-Turn bold mode on						
-
-    bold
-
-Turn underline mode on					
-
-    underline
-
-Turn reverse video on					
-
-    reverse
-
-Move cursor to screen location v,h	
-
-    move
-
-Clear entire screen					
-
-    clear
-
-Move cursor up n lines				
-
-    up
-
-Move cursor down n lines			
-
-    down
-
-Move cursor right n lines			
-
-    right
-
-Move cursor left n lines			
-
-    left
-
-Move cursor to upper left corner		
-
-    home
-
-Move/scroll window up one line			
-
-    scrollUp
-
-Move/scroll window down one line		
-
-    scrollDown
-
-Move to next line						
-
-    nextline
-
-Save cursor position and attributes	
-
-    save
-
-Restore cursor position and attributes	
-
-    restore
-
-Double-height letters, top half		
-
-    bigTop
-
-Double-height letters, bottom half		
-
-    bigBottom
-
-Single width, single height letters	
-
-    singleWidth
-
-Double width, single height letters	
-
-    doubleWidth
-
-Clear line from cursor right			
-
-    clearRight
-
-Clear line from cursor left			
-
-    clearUp
-
-Clear entire line						
-
-    clearLine
-
-Clear screen from cursor down			
-
-    clearDown
-
-Clear screen from cursor up			
-
-    clearUp
-
-Reset terminal to initial state		
-
-    reset
+<b>reverseVideo</b> - <i>Set reverse video on screen</i>
+<b>normalVideo</b> - <i>Set normal video on screen</i>
+<b>normal</b>  - <i>Turn off character attributes</i>
+<b>bold</b> - <i>Turn bold mode on</i>
+<b>underline</b> - <i> Turn underline mode on</i>
+<b>reverse</b> - <i> Turn reverse video on</i>
+<b>move</b> - <i> Move cursor to screen location v,h</i>
+<b>clear</b> - <i> Clear entire screen</i>
+<b>up</b> - <i> Move cursor up n lines</i>
+<b>down</b> - <i> Move cursor down n lines</i>
+<b>right</b> - <i> Move cursor right n lines</i>
+<b>left</b> - <i> Move cursor left n lines</i>
+<b>home</b> - <i> Move cursor to upper left corner</i>
+<b>scrollUp</b> - <i> Move/scroll window up one line</i>
+<b>scrollDown</b> - <i> Move/scroll window down one line</i>
+<b>nextline</b> - <i> Move to next line</i>
+<b>save</b> - <i> Save cursor position and attributes</i>
+<b>restore</b> - <i> Restore cursor position and attributes</i>
+<b>bigTop</b> - <i> Double-height letters, top half</i>
+<b>bigBottom</b> - <i> Double-height letters, bottom half</i>
+<b>singleWidth</b> - <i> Single width, single height letters</i>
+<b>doubleWidth</b> - <i> Double width, single height letters</i>
+<b>clearRight</b> - <i> Clear line from cursor right</i>
+<b>clearUp</b> - <i> Clear line from cursor left</i>
+<b>clearLine</b> - <i> Clear entire line</i>
+<b>clearDown</b> - <i> Clear screen from cursor down</i>
+<b>clearUp</b> - <i> Clear screen from cursor up</i>
+<b>reset</b> - <i> Reset terminal to initial state</i>
 
 Telnet
 --
