@@ -78,7 +78,7 @@ net.createServer(function(c) {
         console.log('<', c.remoteAddress);
     });
 
-}).listen(7000);
+}).listen(port);
 
 console.log('Nyancat running on port %d', port);
 
