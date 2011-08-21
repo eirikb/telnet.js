@@ -15,8 +15,8 @@ counter = 0;
 function drawStars(seq) {
     var i, s;
     stars.push({
-        x: Math.floor(Math.random() * 80),
-        y: Math.floor(Math.random() * 20),
+        x: Math.floor(Math.random() * 70) + 2,
+        y: Math.floor(Math.random() * 18) + 2,
         t: 0,
         c: 0
     });
