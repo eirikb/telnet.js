@@ -10,6 +10,7 @@ feet = 0,
 rainbow = '¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*',
 star = [[' ', ' * ', ' '], ['|', '- -', '|'], ['.', '. .', '.']],
 stars = [];
+port = 7000,
 counter = 0;
 
 function drawStars(seq) {
@@ -65,7 +66,10 @@ net.createServer(function(c) {
         if (data[0] < 200) {
             clearInterval(timer);
             telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
-            normal.nextline.nextline.send(c);
+            normal.nextline.
+            a('Rememeber to check out the console version by niftylettuce').
+            nextline.a('https://github.com/niftylettuce/nyancat.js').
+            nextline.nextline.send(c);
             c.end();
         }
     });
@@ -75,4 +79,6 @@ net.createServer(function(c) {
     });
 
 }).listen(7000);
+
+console.log('Nyancat running on port %d', port);
 
