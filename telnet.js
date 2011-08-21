@@ -57,6 +57,22 @@ var seq = {
     underline: '[4m',
     // Turn reverse video on					
     reverse: '[7m',
+    // Turn black color on
+    black: '[30m', 
+    // Turn red color on
+    red: '[31m', 
+    // Turn green color on
+    green: '[32m', 
+    // Turn yellow color on
+    yellow: '[33m', 
+    // Turn purple color on
+    purple: '[34m', 
+    // Turn pink color on
+    pink: '[35m', 
+    // Turn cyan color on
+    cyan: '[36m', 
+    // Turn white color on
+    white: '[37m', 
     // Move cursor to screen location v,h	
     move: '[Line;ColumnH',
     // Clear entire screen					
@@ -269,8 +285,7 @@ var seq = {
     // Set jump scrolling						
     DECSCLM2: '[?4l'
 };
-exports.enableEcho = function() {
-};
+exports.enableEcho = function() {};
 
 var Seq = function() {
     this.buffer = this.b = this.result = '';
@@ -308,6 +323,19 @@ exports.seq = exports.s = function() {
 
 var Cmd = function() {
     this.buffer = this.b = this.result = [];
+
+    this.e = function(mode) {
+        mode = mode ? cmd.WONT : cmd.WILL;
+        this.buffer += new Buffer([cmd.IAC, mode, cmd.echo]);
+        return this;
+    };
+
+    this.sga = function(mode) {
+        mode = mode ? cmd.WONT: cmd.WILL;
+        console.log(mode)
+        this.buffer += new Buffer([cmd.IAC, mode, cmd.suppressGoAhead]);
+        return this;
+    };
 };
 
 Object.keys(cmd).forEach(function(key) {
@@ -320,8 +348,8 @@ Object.keys(cmd).forEach(function(key) {
 Cmd.prototype.send = function(socket) {
     socket.write(new Buffer(this.buffer));
 };
+
 exports.cmd = exports.c = function() {
     return new Cmd;
 };
-
 
