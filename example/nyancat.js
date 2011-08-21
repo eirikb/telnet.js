@@ -26,13 +26,25 @@ function drawCat(s) {
 };
 
 net.createServer(function(c) {
-    telnet.seq().clear.bold.send(c);
+    telnet.cmd().IAC.WILL.echo.IAC.WILL.suppressGoAhead.send(c);
+
+    telnet.seq().clear.home.normal.a('Press q to exit').bold.send(c);
 
     setInterval(function() {
         var s = telnet.seq().move(1, 10);
         drawCat(s).send(c);
     },
     100);
+
+    c.on('data', function(data) {
+        for (var i = 0; i < data.length; i++) {
+            if (data[i] >= 32 && data[i] <= 126) {
+                telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
+                normal.nextline.nextline.send(c);
+                c.end();
+            }
+        }
+    });
 
 }).listen(7000);
 
