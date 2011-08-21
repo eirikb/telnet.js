@@ -5,45 +5,75 @@ telnet = require('../telnet.js');
 
 var cat = [' ,---/V\\', '~|__(o.o)'],
 feets = [' U U U U ', '  UU  UU '],
+colors = ['red', 'yellow', 'green', 'cyan'],
 feet = 0,
-rainbow = '¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*',
-colors = ['red', 'green', 'yellow', 'purple', 'pink', 'cyan'],
-color = 0;
+rainbow = '¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*',
+star = [[' ', ' * ', ' '], ['|', '- -', '|'], ['.', '. .', '.']],
+stars = [];
+counter = 0;
 
-function drawCat(s) {
-    var drawRainbow = function(text) {
-        color = color > 0 ? color - 1: colors.length - 1;
-        s[colors[color]].a(rainbow).white.a(text).nextline;
-    };
-    drawRainbow('');
-    cat.forEach(function(c) {
-        drawRainbow(c);
+function drawStars(seq) {
+    var i, s;
+    stars.push({
+        x: Math.floor(Math.random() * 80),
+        y: Math.floor(Math.random() * 20),
+        t: 0,
+        c: 0
     });
-    feet = feet > 0 ? feet - 1: feets.length - 1;
-    drawRainbow(feets[feet]);
 
-    return s;
-};
+    stars.forEach(function(s, i) {
+        seq.move(s.x, s.y).a(star[s.t][0]).
+        move(s.x - 1, s.y + 1).a(star[s.t][1]).
+        move(s.x, s.y + 2).a(star[s.t][2]);
+        s.x -= 2;
+        if (++s.c === 3) {
+            s.c = 0;
+            s.t++;
+        }
+        if (s.x < 3 || s.t === 3) {
+            stars.splice(i, 1);
+        }
+    });
+}
+
+function draw(c) {
+    var seq = telnet.seq().clear;
+    drawStars(seq);
+    seq.bold.move(1, 10);
+    counter = counter < 8 ? counter + 2: 0;
+    colors.forEach(function(color) {
+        seq[color].clearLine.a(rainbow.slice(counter, rainbow.length - 10 + counter)).nextline;
+    });
+
+    feet = feet > 0 ? feet - 1: feets.length - 1;
+    seq.white.move(42, 11).a(cat[0]).move(42, 12).a(cat[1]).
+    move(42, 13).a(feets[feet]);
+
+    seq.send(c);
+}
 
 net.createServer(function(c) {
+    console.log('>', c.remoteAddress);
     telnet.cmd().IAC.WILL.echo.IAC.WILL.suppressGoAhead.send(c);
 
     telnet.seq().clear.home.normal.a('Press q to exit').bold.send(c);
 
-    setInterval(function() {
-        var s = telnet.seq().move(1, 10);
-        drawCat(s).send(c);
+    var timer = setInterval(function() {
+        draw(c);
     },
-    100);
+    200);
 
     c.on('data', function(data) {
-        for (var i = 0; i < data.length; i++) {
-            if (data[i] >= 32 && data[i] <= 126) {
-                telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
-                normal.nextline.nextline.send(c);
-                c.end();
-            }
+        if (data[0] < 200) {
+            clearInterval(timer);
+            telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
+            normal.nextline.nextline.send(c);
+            c.end();
         }
+    });
+
+    c.on('end', function() {
+        console.log('<', c.remoteAddress);
     });
 
 }).listen(7000);
