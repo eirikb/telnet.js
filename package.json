@@ -8,6 +8,6 @@
   "dependencies"  : [],
   "repository"    : {"type": "git", "url": "https://github.com/eirikb/telnet.js"},
   "main"          : "telnet.js",
-  "version"       : "0.0.3"
+  "version"       : "0.0.4"
 }
 
