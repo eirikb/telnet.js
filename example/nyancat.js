@@ -49,19 +49,17 @@ function draw(c) {
     seq.white.move(42, 11).a(cat[0]).move(42, 12).a(cat[1]).
     move(42, 13).a(feets[feet]);
 
-    seq.send(c);
+    seq.normal.home.a('press q to exit').send(c);
 }
 
 net.createServer(function(c) {
     console.log('>', c.remoteAddress);
     telnet.cmd().IAC.WILL.echo.IAC.WILL.suppressGoAhead.send(c);
 
-    telnet.seq().clear.home.normal.a('Press q to exit').bold.send(c);
-
     var timer = setInterval(function() {
         draw(c);
     },
-    200);
+    100);
 
     c.on('data', function(data) {
         if (data[0] < 200) {
