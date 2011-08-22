@@ -285,7 +285,6 @@ var seq = {
     // Set jump scrolling						
     DECSCLM2: '[?4l'
 };
-exports.enableEcho = function() {};
 
 var Seq = function() {
     this.buffer = this.b = this.result = '';
@@ -323,19 +322,6 @@ exports.seq = exports.s = function() {
 
 var Cmd = function() {
     this.buffer = this.b = this.result = [];
-
-    this.e = function(mode) {
-        mode = mode ? cmd.WONT : cmd.WILL;
-        this.buffer += new Buffer([cmd.IAC, mode, cmd.echo]);
-        return this;
-    };
-
-    this.sga = function(mode) {
-        mode = mode ? cmd.WONT: cmd.WILL;
-        console.log(mode)
-        this.buffer += new Buffer([cmd.IAC, mode, cmd.suppressGoAhead]);
-        return this;
-    };
 };
 
 Object.keys(cmd).forEach(function(key) {
