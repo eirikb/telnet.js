@@ -3,8 +3,8 @@ telnet.js
 
 Library to generate output for a telnet server
 
-Note that this is not a telnet client or telnet server, its a library that will create strings a server can use to reply to clients.
-require('net') to create a server (see [server.js](https://github.com/eirikb/telnet.js/blob/master/server.js))
+Note that this is not a telnet client or telnet server, its a library that will create strings a server can use to reply to clients.  
+require('net') to create a server.
 
 Install
 --
@@ -38,6 +38,13 @@ Escape sequences
 <b>bold</b> - <i>Turn bold mode on</i>  
 <b>underline</b> - <i> Turn underline mode on</i>  
 <b>reverse</b> - <i> Turn reverse video on</i>  
+<b>red</b> - <i>Turn red color one</i>
+<b>green</b> - <i>Turn green color one</i>
+<b>yellow</b> - <i>Turn yellow color one</i>
+<b>purple</b> - <i>Turn purple color one</i>
+<b>pink</b> - <i>Turn pink color one</i>
+<b>cyan</b> - <i>Turn cyan color one</i>
+<b>white</b> - <i>Turn white color one</i>
 <b>move</b> - <i> Move cursor to screen location v,h</i>  
 <b>clear</b> - <i> Clear entire screen</i>  
 <b>up</b> - <i> Move cursor up n lines</i>  
