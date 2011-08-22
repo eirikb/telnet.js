@@ -7,7 +7,8 @@ var cat = [' ,---/V\\', '~|__(o.o)'],
 feets = [' U U U U ', '  UU  UU '],
 colors = ['red', 'yellow', 'green', 'cyan'],
 feet = 0,
-rainbow = '¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*¯`·.,¸,.·*',
+rainbow = " _,.-~*'`'*~-.,_,.-~*'`'*~-.,_,.-~*'`'*~-.,_,.-~*'`'*~-.,_"; 
+//rainbow = '------------------------------------------------------',
 star = [[' ', ' * ', ' '], ['|', '- -', '|'], ['.', '. .', '.']],
 stars = [];
 port = 7000,
@@ -43,7 +44,7 @@ function draw(c) {
     seq.bold.move(1, 10);
     counter = counter < 8 ? counter + 2: 0;
     colors.forEach(function(color) {
-        seq[color].clearLine.a(rainbow.slice(counter, rainbow.length - 10 + counter)).nextline;
+        seq[color].clearLine.a(rainbow.slice(counter, rainbow.length - 16 + counter)).nextline;
     });
 
     feet = feet > 0 ? feet - 1: feets.length - 1;
