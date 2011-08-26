@@ -7,12 +7,10 @@ var cat = [' ,---/V\\', '~|__(o.o)'],
 feets = [' U U U U ', '  UU  UU '],
 colors = ['red', 'yellow', 'green', 'cyan'],
 feet = 0,
-rainbow = " _,.-~*'`'*~-.,_,.-~*'`'*~-.,_,.-~*'`'*~-.,_,.-~*'`'*~-.,_"; 
-//rainbow = '------------------------------------------------------',
+rainbow = "~-.,_,.-~*'`'";
 star = [[' ', ' * ', ' '], ['|', '- -', '|'], ['.', '. .', '.']],
 stars = [];
-port = 7000,
-counter = 0;
+port = 7000;
 
 function drawStars(seq) {
     var i, s;
@@ -38,33 +36,46 @@ function drawStars(seq) {
     });
 }
 
-function draw(c) {
-    var seq = telnet.seq().clear;
+function draw(c, counter, x, y) {
+    var seq = telnet.seq().clear,
+    rb = '',
+    i;
+    for (i = 0; i < (x + counter) / rainbow.length; i++) {
+        rb += rainbow;
+    }
+    rb = rb.slice(counter, x + counter);
     drawStars(seq);
-    seq.bold.move(1, 10);
-    counter = counter < 8 ? counter + 2: 0;
+    seq.bold.move(1, y);
     colors.forEach(function(color) {
-        seq[color].clearLine.a(rainbow.slice(counter, rainbow.length - 16 + counter)).nextline;
+        seq[color].clearLine.a(rb).nextline;
     });
 
     feet = feet > 0 ? feet - 1: feets.length - 1;
-    seq.white.move(42, 11).a(cat[0]).move(42, 12).a(cat[1]).
-    move(42, 13).a(feets[feet]);
+    seq.white.move(x, y).a(cat[0]).move(x, y + 1).a(cat[1]).
+    move(x, y + 2).a(feets[feet]);
 
-    seq.normal.home.a('press q to exit').send(c);
+    seq.normal.home.a('press q to exit - arrows to move').send(c);
 }
 
 net.createServer(function(c) {
+    var running = true,
+    counter = 0;
+    x = 40,
+    y = 10;
+
     console.log('>', c.remoteAddress);
     telnet.cmd().IAC.WILL.echo.IAC.WILL.suppressGoAhead.send(c);
 
     var timer = setInterval(function() {
-        draw(c);
+        if (running) {
+            counter = counter < rainbow.length - 1 ? counter + 2: 0;
+            draw(c, counter, x, y);
+        }
     },
     100);
 
     c.on('data', function(data) {
-        if (data[0] < 200) {
+        if (data[0]  != 27 && data[0] < 200) {
             clearInterval(timer);
             telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
             normal.nextline.
@@ -72,10 +83,31 @@ net.createServer(function(c) {
             nextline.a('https://github.com/niftylettuce/nyancat.js').
             nextline.nextline.send(c);
             c.end();
+        } else if (data[1] === 91) {
+            switch (data[2]) {
+            case 68:
+                x--;
+                break;
+            case 65:
+                y--;
+                break;
+            case 67:
+                x++;
+                break;
+            case 66:
+                y++;
+                break;
+            }
+            x = x < 0 ? 0 : x;
+            x = x > 70 ? 70 : x;
+            y = y < 0 ? 0 : y;
+            y = y > 40 ? 40 : y;
         }
     });
 
     c.on('end', function() {
+        clearInterval(timer);
+        running = false;
         console.log('<', c.remoteAddress);
     });
 
