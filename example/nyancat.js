@@ -59,7 +59,7 @@ function draw(c, counter, x, y) {
 
 net.createServer(function(c) {
     var running = true,
-    counter = 0;
+    counter = 0,
     x = 40,
     y = 10;
 
@@ -78,6 +78,7 @@ net.createServer(function(c) {
         if (data[0]  != 27 && data[0] < 200) {
             clearInterval(timer);
             telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
+            normal.nextline.a('Using ').bold.a('telnet.js').normal.a(' - https://github.com/eirikb/telnet.js').
             normal.nextline.
             a('Rememeber to check out the console version by niftylettuce').
             nextline.a('https://github.com/niftylettuce/nyancat.js').
@@ -98,10 +99,10 @@ net.createServer(function(c) {
                 y++;
                 break;
             }
-            x = x < 0 ? 0 : x;
-            x = x > 70 ? 70 : x;
-            y = y < 0 ? 0 : y;
-            y = y > 40 ? 40 : y;
+            x = x < 0 ? 0: x;
+            x = x > 70 ? 70: x;
+            y = y < 0 ? 0: y;
+            y = y > 40 ? 40: y;
         }
     });
 
