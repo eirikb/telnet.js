@@ -6,6 +6,12 @@ Library to generate output for a telnet server
 Note that this is not a telnet client or telnet server, its a library that will create strings a server can use to reply to clients.  
 require('net') to create a server.
 
+Demo
+--
+Try it:
+
+    telnet eirikb.no
+
 Install
 --
 
