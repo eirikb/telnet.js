@@ -8,19 +8,18 @@ feets = [' U U U U ', '  UU  UU '],
 colors = ['red', 'yellow', 'green', 'cyan'],
 rainbow = "~-.,_,.-~*'`'";
 star = [[' ', ' * ', ' '], ['|', '- -', '|'], ['.', '. .', '.']],
-stars = [];
 port = 9001;
 
-function drawStars(seq) {
+function drawStars(c, seq) {
     var i, s;
-    stars.push({
+    c.stars.push({
         x: Math.floor(Math.random() * 70) + 2,
         y: Math.floor(Math.random() * 18) + 2,
         t: 0,
         c: 0
     });
 
-    stars.forEach(function(s, i) {
+    c.stars.forEach(function(s, i) {
         seq.move(s.x, s.y).a(star[s.t][0]).
         move(s.x - 1, s.y + 1).a(star[s.t][1]).
         move(s.x, s.y + 2).a(star[s.t][2]);
@@ -30,7 +29,7 @@ function drawStars(seq) {
             s.t++;
         }
         if (s.x < 3 || s.t === 3) {
-            stars.splice(i, 1);
+            c.stars.splice(i, 1);
         }
     });
 }
@@ -43,7 +42,7 @@ function draw(c, counter, x, y) {
         rb += rainbow;
     }
     rb = rb.slice(counter, x + counter);
-    drawStars(seq);
+    drawStars(c, seq);
     seq.bold.move(1, y);
     colors.forEach(function(color) {
         seq[color].clearLine.a(rb).nextline;
@@ -64,7 +63,8 @@ net.createServer(function(c) {
     counter = 0,
     x = 40,
     y = 10;
-    c.feet = 0;
+    c.feet = 0,
+    c.stars = [];
 
     console.log('>', c.remoteAddress, new Date());
     if (!telnet.cmd().IAC.WILL.echo.IAC.WILL.suppressGoAhead.send(c)) {
@@ -86,14 +86,14 @@ net.createServer(function(c) {
             clearInterval(timer);
             if (running) {
                 try {
-                telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
-                normal.nextline.a('Using ').bold.a('telnet.js').normal.a(' - https://github.com/eirikb/telnet.js').
-                normal.nextline.
-                a('Rememeber to check out the console version by niftylettuce').
-                nextline.a('https://github.com/niftylettuce/nyancat.js').
-                nextline.nextline.send(c);
-                c.end();
-                } catch (e) {
+                    telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
+                    normal.nextline.a('Using ').bold.a('telnet.js').normal.a(' - https://github.com/eirikb/telnet.js').
+                    normal.nextline.
+                    a('Rememeber to check out the console version by niftylettuce').
+                    nextline.a('https://github.com/niftylettuce/nyancat.js').
+                    nextline.nextline.send(c);
+                    c.end();
+                } catch(e) {
                     console.log(e);
                 }
             }
