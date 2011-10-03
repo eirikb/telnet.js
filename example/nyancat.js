@@ -6,11 +6,10 @@ telnet = require('../telnet.js');
 var cat = [' ,---/V\\', '~|__(o.o)'],
 feets = [' U U U U ', '  UU  UU '],
 colors = ['red', 'yellow', 'green', 'cyan'],
-feet = 0,
 rainbow = "~-.,_,.-~*'`'";
 star = [[' ', ' * ', ' '], ['|', '- -', '|'], ['.', '. .', '.']],
 stars = [];
-port = 7000;
+port = 9001;
 
 function drawStars(seq) {
     var i, s;
@@ -50,11 +49,14 @@ function draw(c, counter, x, y) {
         seq[color].clearLine.a(rb).nextline;
     });
 
-    feet = feet > 0 ? feet - 1: feets.length - 1;
+    c.feet = c.feet > 0 ? c.feet - 1: feets.length - 1;
     seq.white.move(x, y).a(cat[0]).move(x, y + 1).a(cat[1]).
-    move(x, y + 2).a(feets[feet]);
-
-    seq.normal.home.a('press q to exit - arrows to move').send(c);
+    move(x, y + 2).a(feets[c.feet]);
+    try {
+        return seq.normal.home.a('press q to exit - arrows to move').send(c);
+    } catch(e) {
+        console.log(e);
+    }
 }
 
 net.createServer(function(c) {
@@ -62,14 +64,19 @@ net.createServer(function(c) {
     counter = 0,
     x = 40,
     y = 10;
+    c.feet = 0;
 
-    console.log('>', c.remoteAddress);
-    telnet.cmd().IAC.WILL.echo.IAC.WILL.suppressGoAhead.send(c);
+    console.log('>', c.remoteAddress, new Date());
+    if (!telnet.cmd().IAC.WILL.echo.IAC.WILL.suppressGoAhead.send(c)) {
+        running = false;
+    }
 
     var timer = setInterval(function() {
         if (running) {
             counter = counter < rainbow.length - 1 ? counter + 2: 0;
-            draw(c, counter, x, y);
+            if (!draw(c, counter, x, y)) {
+                running = false;
+            }
         }
     },
     100);
@@ -77,13 +84,19 @@ net.createServer(function(c) {
     c.on('data', function(data) {
         if (data[0]  != 27 && data[0] < 200) {
             clearInterval(timer);
-            telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
-            normal.nextline.a('Using ').bold.a('telnet.js').normal.a(' - https://github.com/eirikb/telnet.js').
-            normal.nextline.
-            a('Rememeber to check out the console version by niftylettuce').
-            nextline.a('https://github.com/niftylettuce/nyancat.js').
-            nextline.nextline.send(c);
-            c.end();
+            if (running) {
+                try {
+                telnet.seq().clear.home.normal.a('Thanks for watching! - ').bold.a('eirikb@eirikb.no').
+                normal.nextline.a('Using ').bold.a('telnet.js').normal.a(' - https://github.com/eirikb/telnet.js').
+                normal.nextline.
+                a('Rememeber to check out the console version by niftylettuce').
+                nextline.a('https://github.com/niftylettuce/nyancat.js').
+                nextline.nextline.send(c);
+                c.end();
+                } catch (e) {
+                    console.log(e);
+                }
+            }
         } else if (data[1] === 91) {
             switch (data[2]) {
             case 68:
@@ -102,14 +115,14 @@ net.createServer(function(c) {
             x = x < 0 ? 0: x;
             x = x > 70 ? 70: x;
             y = y < 0 ? 0: y;
-            y = y > 40 ? 40: y;
+            y = y > 20 ? 20: y;
         }
     });
 
     c.on('end', function() {
         clearInterval(timer);
         running = false;
-        console.log('<', c.remoteAddress);
+        console.log('<', c.remoteAddress, new Date());
     });
 
 }).listen(port);
