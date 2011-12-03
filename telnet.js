@@ -313,7 +313,13 @@ Seq.prototype.append = Seq.prototype.a = function(msg) {
 };
 
 Seq.prototype.send = function(socket) {
+    try  {
     socket.write(this.buffer);
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+    return true;
 };
 
 exports.seq = exports.s = function() {
@@ -332,7 +338,13 @@ Object.keys(cmd).forEach(function(key) {
 });
 
 Cmd.prototype.send = function(socket) {
+    try {
     socket.write(new Buffer(this.buffer));
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+    return true;
 };
 
 exports.cmd = exports.c = function() {
