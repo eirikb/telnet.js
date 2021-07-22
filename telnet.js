@@ -1,4 +1,4 @@
-var ESC = new Buffer([27]);
+var ESC = Buffer.from([27]);
 
 // Telnet commands
 var cmd = {
@@ -339,7 +339,7 @@ Object.keys(cmd).forEach(function(key) {
 
 Cmd.prototype.send = function(socket) {
     try {
-    socket.write(new Buffer(this.buffer));
+    socket.write(Buffer.from(this.buffer));
     } catch (e) {
         console.log(e);
         return false;
